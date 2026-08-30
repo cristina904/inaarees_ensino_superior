@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INAAREES - Instituto Nacional de Avaliação, Acreditação e Reconhecimento de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif}
+:root{--azul:#0B2C5C;--azul2:#123a78;--dourado:#C9A227;--vermelho:#CE1126;--bg:#f5f7fb;--borda:#e3e8f0;--verde:#0f7a3d}
+body{background:var(--bg);color:#111;line-height:1.5}
+header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:4px solid var(--dourado);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:800;color:var(--azul);font-size:16px}
+.logo div{width:44px;height:44px;background:var(--azul);color:var(--dourado);display:grid;place-items:center;border-radius:12px;font-size:22px;font-weight:800}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav a{color:var(--azul);text-decoration:none;font-weight:700;font-size:12px;padding:7px 10px;border-radius:8px;border:1px solid var(--borda);cursor:pointer}
+nav a.active,nav a:hover{background:var(--azul);color:#fff;border-color:var(--azul)}
+.btn{background:var(--azul);color:#fff;border:0;padding:11px 16px;border-radius:11px;font-weight:700;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.btn-gold{background:var(--dourado);color:#000}
+.btn-red{background:var(--vermelho);color:#fff}
+.btn-outline{background:#fff;border:1.5px solid var(--azul);color:var(--azul)}
+.btn-small{padding:7px 11px;font-size:11px}
+.btn:disabled{opacity:.45}
+.layout{display:flex;min-height:calc(100vh - 70px)}
+.sidebar{width:280px;background:#fff;border-right:1px solid var(--borda);padding:12px;display:none;flex-direction:column;gap:6px;overflow:auto}
+.sidebar.active{display:flex}
+.sidebar a{padding:10px 11px;border-radius:10px;text-decoration:none;color:#223;font-size:12.5px;font-weight:600;display:flex;gap:8px;align-items:center;border:1px solid transparent;cursor:pointer}
+.sidebar a.active,.sidebar a:hover{background:#eef3ff;border-color:#c9d6f0;color:var(--azul)}
+.avatar-box{display:flex;gap:10px;align-items:center;padding:10px;background:linear-gradient(135deg,#f8fafc,#fff8e1);border:1px solid var(--borda);border-radius:14px;margin-bottom:8px}
+.avatar{width:48px;height:48px;border-radius:50%;background:var(--azul);color:var(--dourado);display:grid;place-items:center;font-weight:800;font-size:20px;border:2px solid var(--dourado);overflow:hidden}
+.main{flex:1;overflow:auto}
+.hero{background:linear-gradient(110deg,var(--azul) 65%, var(--azul2));color:#fff;padding:36px 16px}
+.hero h1{font-size:26px;line-height:1.15;max-width:750px}
+.hero p{margin:12px 0 16px;opacity:.92;max-width:750px;font-size:13.5px}
+.grid{display:grid;gap:14px;padding:14px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 8px 28px rgba(11,44,92,.07);border:1px solid var(--borda)}
+.card h2{color:var(--azul);margin-bottom:10px;font-size:17px;display:flex;gap:8px;align-items:center}
+.badge{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;display:inline-block}
+.b-pend{background:#fff3cd;color:#7a5d00}.b-ref{background:#cce5ff;color:#003a75}.b-pag{background:#e2d6ff;color:#3d1e8a}.b-aprov{background:#0B2C5C;color:#fff}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{padding:9px 7px;border-bottom:1px solid #eef2f7;text-align:left;font-size:12px;vertical-align:top}
+th{background:#f8fafc;color:var(--azul);font-size:10px;text-transform:uppercase}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid #d6deeb;border-radius:11px;margin-top:6px;font-size:13px;background:#fff}
+label{font-size:11px;font-weight:700;margin-top:12px;display:block;color:var(--azul);text-transform:uppercase}
+.section{display:none;padding-bottom:80px}
+.section.active{display:block}
+.footer{background:var(--azul);color:#fff;padding:24px 16px;font-size:12px}
+.footer a{color:var(--dourado);text-decoration:none}
+.alert{padding:12px;border-radius:10px;font-size:12px;margin:10px 0;border:1px solid}
+.alert-info{background:#e8f0ff;border-color:#b8d0ff;color:#0b2c5c}
+.alert-warn{background:#fff8e1;border-color:#ffe082;color:#6d4c00}
+.alert-success{background:#d4edda;border-color:#a3d9b1;color:#155724}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.steps span{padding:6px 10px;border-radius:999px;background:#eef2f9;font-size:11px;font-weight:700;border:1px solid var(--borda)}
+.steps .active{background:var(--azul);color:#fff;border-color:var(--azul)}
+.steps .done{background:var(--dourado);color:#000;border-color:var(--dourado)}
+.nav-actions{display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap}
+.pagamento-box{background:linear-gradient(135deg,#fff,#fff8e1);border:2px solid var(--dourado);border-radius:14px;padding:14px;margin:12px 0}
+.mono{font-family:monospace}
+.whats{position:fixed;right:14px;bottom:14px;background:#25D366;color:#fff;padding:12px 14px;border-radius:999px;text-decoration:none;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,.2);z-index:200}
+.countdown{background:var(--azul);color:#fff;padding:3px 8px;border-radius:999px;font-size:11px;display:inline-block;margin-top:4px}
+.upload{border:2px dashed var(--dourado);border-radius:12px;padding:12px;background:#fffef5;text-align:center}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><div>🇦🇴</div><span>INAAREES<br><small style="font-weight:400;font-size:10px">GOVERNO DE ANGOLA - Kilamba</small></span></div>
+<nav>
+<a id="nav-inicio" class="active" onclick="go('#inicio')">🏠 Início</a>
+<a id="nav-sobre" onclick="go('#sobre')">ℹ️ Sobre</a>
+<a id="nav-servicos" onclick="go('#servicos')">🎓 Serviços</a>
+<a id="nav-taxas" onclick="go('#taxas')">💰 Taxas</a>
+<a id="nav-legislacao" onclick="go('#legislacao')">📜 Legislação</a>
+</nav>
+<div style="display:flex;gap:6px"><button class="btn" onclick="go('#login')" id="bEntrar">🔐 Entrar</button><button class="btn btn-gold" onclick="go('#criar')" id="bCriar">✨ Criar Conta</button><button class="btn btn-red" onclick="logout()" id="bSair" style="display:none">🚪 Sair</button></div>
+</header>
+
+<div class="layout">
+<aside id="sideUser" class="sidebar">
+<div class="avatar-box">
+<div class="avatar" id="avatarSide">👤</div>
+<div><b id="sideNome" style="font-size:12px">Utente</b><br><small id="sideEmail" style="font-size:10px;color:#666">email</small><br><small style="font-size:10px">🟢 Online • 🇦🇴</small></div>
+</div>
+<b style="font-size:11px;color:var(--azul)">📌 MEU PAINEL - Tudo Ligado</b>
+<a onclick="go('#perfil')">👤 Meu Perfil</a>
+<a onclick="go('#dados-pessoais')">🪪 Dados Pessoais</a>
+<a onclick="go('#documentos')">📎 Meus Documentos</a>
+<a onclick="go('#pedidos')">📄 Meus Pedidos</a>
+<a onclick="go('#pendentes')">⏳ Pendentes</a>
+<a onclick="go('#aprovados')">✅ Aprovados</a>
+<a onclick="go('#recibos')">🧾 Recibos (após comprovativo)</a>
+<a onclick="go('#declaracoes')">🎓 Declarações (após prazo)</a>
+<a onclick="go('#solicitar-novo')">➕ Solicitar Novo Pedido</a>
+<a onclick="go('#solicitar-angola')">🇦🇴 Solicitar Angola</a>
+<a onclick="go('#solicitar-exterior')">🌍 Solicitar Exterior</a>
+</aside>
+
+<main class="main">
+<section id="inicio" class="section active">
+<div class="hero">
+<h1>🇦🇴 INAAREES - Homologação e Reconhecimento de Estudos do Ensino Superior</h1>
+<p>🏛️ Reconhecimento oficial de diplomas obtidos em Angola e no Exterior. 📍 Sede: Kilamba, Belas, Luanda<br>📱 WhatsApp: +244 938 510 719 | 📧 inaarees.gov.ao@gmail.com<br>💳 Entidade: <b>00579</b> | 🔢 Referência: <b>457525796</b><br>🧾 Recibo liberado ao anexar comprovativo | 🎓 Declaração liberada após comprovativo + prazo da taxa</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-gold" onclick="go('#solicitar-novo')">➕ Solicitar Novo Pedido Avançar ➡️</button>
+<button class="btn" style="background:#fff;color:var(--azul)" onclick="go('#taxas')">💰 Ver Taxas: 8.000Kz a 35.000Kz</button>
+<button class="btn btn-outline" style="background:transparent;color:#fff;border-color:#fff" onclick="go('#perfil')">👤 Meu Perfil</button>
+</div>
+</div>
+<div class="grid">
+<div class="card"><h2>👤 Perfil do Usuário</h2><p style="font-size:12px">🪪 Dados pessoais, 📞 contactos, 🆔 BI, 🖼️ avatar com emoji baseado no nome. Tudo sincronizado.</p><div class="nav-actions"><button class="btn-small btn" onclick="go('#perfil')">🔍 Ver Perfil</button><button class="btn-small btn-outline" onclick="go('#dados-pessoais')">✏️ Editar Dados</button></div></div>
+<div class="card"><h2>📎 Meus Documentos</h2><p style="font-size:12px">📁 Cofre: 🪪 BI, 🎓 Diploma Angola, 🌍 Diploma Exterior, 💳 Comprovativo. Ligado aos pedidos.</p><div class="nav-actions"><button class="btn-small btn" onclick="go('#documentos')">📂 Abrir</button><button class="btn-small btn-gold" onclick="go('#solicitar-novo')">➕ Novo Pedido</button></div></div>
+<div class="card"><h2>📄 Meus Pedidos</h2><p style="font-size:12px">⏳ Pendentes e ✅ Aprovados. Recibos e declarações. Tudo conectado com botões Avançar Voltar Editar Concluir.</p><div class="nav-actions"><button class="btn-small btn" onclick="go('#pedidos')">📄 Ver Pedidos</button><button class="btn-small btn-outline" onclick="go('#pendentes')">⏳ Pendentes</button></div></div>
+</div>
+</section>
+
+<section id="sobre" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>ℹ️ Sobre INAAREES</h2><p style="font-size:12px">🏛️ Instituto Nacional de Avaliação, Acreditação e Reconhecimento de Estudos. 📍 Kilamba, Belas, Luanda. Sistema com todas categorias, funções, secções ligadas, sincronizadas e conectadas.</p><div class="nav-actions"><button class="btn btn-outline" onclick="go('#inicio')">⬅️ Voltar</button><button class="btn" onclick="go('#servicos')">Avançar para Serviços ➡️</button><button class="btn btn-gold" onclick="go('#taxas')">💰 Avançar Taxas ➡️</button></div></div></div></section>
+
+<section id="servicos" class="section"><div class="grid"><div class="card"><h2>🇦🇴 Estudos em Angola</h2><p style="font-size:12px">Homologação IES angolanas.</p><button class="btn btn-gold" onclick="go('#solicitar-angola')">🇦🇴 Avançar Angola ➡️</button></div><div class="card"><h2>🌍 Estudos no Exterior</h2><p style="font-size:12px">Reconhecimento diplomas estrangeiros.</p><button class="btn" onclick="go('#solicitar-exterior')">🌍 Avançar Exterior ➡️</button></div><div class="card"><h2>➕ Solicitar Novo Pedido</h2><p style="font-size:12px">Novo pedido homologação ou reconhecimento.</p><button class="btn" onclick="go('#solicitar-novo')">➕ Avançar Novo Pedido ➡️</button></div></div><div style="padding:14px"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#inicio')">⬅️ Voltar Início</button><button class="btn" onclick="go('#taxas')">Avançar Taxas ➡️</button><button class="btn btn-gold" onclick="go('#perfil')">👤 Meu Perfil Avançar ➡️</button></div></div></section>
+
+<section id="taxas" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>💰 Taxas Oficiais INAAREES - Entidade 00579 Ref 457525796</h2><table><tr><th>📌 Modalidade</th><th>💵 Valor</th><th>⏳ Prazo Declaração</th><th>🎯 Ação</th></tr><tr><td>🕐 Normal</td><td>8.000 Kz</td><td>30 dias úteis após comprovativo</td><td><button class="btn-small btn" onclick="selecionarTaxa('normal')">✅ Selecionar</button></td></tr><tr><td>⚡ Urgente</td><td>25.000 Kz</td><td>15 dias úteis</td><td><button class="btn-small btn" onclick="selecionarTaxa('urgente')">✅ Selecionar</button></td></tr><tr><td>⭐ Personalizado</td><td>35.000 Kz</td><td>24h úteis</td><td><button class="btn-small btn" onclick="selecionarTaxa('personalizado')">✅ Selecionar</button></td></tr><tr><td>🚀 Executivo</td><td>Sob consulta</td><td>2h úteis</td><td><button class="btn-small btn" onclick="selecionarTaxa('executivo')">✅ Selecionar</button></td></tr></table>
+<div class="pagamento-box"><b>💳 PAGAMENTO OFICIAL</b><br><b>🏦 Entidade:</b> <span class="mono" style="font-size:18px;background:#fff;padding:6px 12px;border-radius:8px;border:2px solid var(--dourado)">00579</span> <b>🔢 Referência:</b> <span class="mono" style="font-size:18px;background:#fff;padding:6px 12px;border-radius:8px;border:2px solid var(--dourado)">457525796</span><br><br><div class="alert alert-success">✅ Recibo liberado automaticamente ao anexar comprovativo</div><div class="alert alert-info">🎓 Declaração liberada após comprovativo + prazo da taxa</div></div>
+<div class="nav-actions"><button class="btn btn-outline" onclick="go('#servicos')">⬅️ Voltar</button><button class="btn btn-gold" onclick="go('#solicitar-novo')">➕ Solicitar Novo Pedido Avançar ➡️</button><button class="btn" onclick="go('#legislacao')">Avançar Legislação ➡️</button></div>
+</div></div></section>
+
+<section id="legislacao" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>📜 Legislação</h2><p style="font-size:12px">📖 Decreto Presidencial 193/18 - INAAREES. Todas secções ligadas.</p><div class="nav-actions"><button class="btn btn-outline" onclick="go('#taxas')">⬅️ Voltar</button><button class="btn btn-gold" onclick="go('#inicio')">✅ Concluir e Voltar Início</button></div></div></div></section>
+
+<section id="solicitar-novo" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>➕ Solicitar Novo Pedido de Homologação ou Reconhecimento - Hub Central Ligado</h2><div class="steps"><span class="active">1️⃣ Escolher Tipo</span><span>2️⃣ Dados</span><span>3️⃣ Documentos</span><span>4️⃣ Pagamento</span><span>5️⃣ Concluir</span></div><p style="font-size:12px">🔗 Escolha onde estudou. Todas etapas ligadas, sincronizadas e conectadas.</p><div class="grid" style="padding:0;margin-top:12px"><div class="card"><h2>🇦🇴 Estudos em Angola</h2><p style="font-size:12px">🏫 IES angolanas</p><button class="btn btn-gold" onclick="go('#solicitar-angola')">🇦🇴 Avançar Angola ➡️</button></div><div class="card"><h2>🌍 Estudos no Exterior</h2><p style="font-size:12px">✈️ Exterior</p><button class="btn" onclick="go('#solicitar-exterior')">🌍 Avançar Exterior ➡️</button></div></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#servicos')">⬅️ Voltar</button><button class="btn" onclick="go('#perfil')">👤 Perfil Avançar ➡️</button><button class="btn btn-gold" onclick="go('#documentos')">📎 Documentos Avançar ➡️</button></div></div></div></section>
+
+<section id="solicitar-angola" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>🇦🇴 Solicitar Homologação - Angola - Com Botões Avançar Voltar Editar Concluir</h2><div class="steps"><span class="done">✅ Tipo Angola</span><span class="active" id="stepAngola">2️⃣ Dados Curso</span><span>3️⃣ Documentos</span><span>4️⃣ Pagamento 00579/457525796</span></div><div id="angolaStep1"><label>💰 Modalidade</label><select id="modAngola"><option value="normal">🕐 Normal 8.000Kz - 30 dias</option><option value="urgente">⚡ Urgente 25.000Kz - 15 dias</option><option value="personalizado">⭐ Personalizado 35.000Kz - 24h</option><option value="executivo">🚀 Executivo 2h</option></select><label>🎓 Curso / Grau</label><input id="cursoAngola" placeholder="Ex: Licenciatura em Direito"><label>🏫 Instituição Angola</label><input id="instAngola" placeholder="Ex: UAN"><label>🔢 Nº Diploma</label><input id="docAngola"><label>📅 Ano</label><input id="anoAngola"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#solicitar-novo')">⬅️ Voltar</button><button class="btn" onclick="avancarAngola()">Avançar ➡️</button></div></div><div id="angolaStep2" style="display:none"><div class="upload"><b>📎 3️⃣ Documentos Obrigatórios Angola</b><br><label>🪪 BI / Passaporte</label><input type="file" id="fileAngolaBI"><label>🎓 Diploma Angola</label><input type="file" id="fileAngolaDip"><small id="statusAngola" style="color:green"></small></div><div class="pagamento-box"><b>💳 Pagamento: Entidade 00579 Ref 457525796</b></div><div class="nav-actions"><button class="btn btn-outline" onclick="voltarAngola()">⬅️ Voltar</button><button class="btn" onclick="editarAngola()">✏️ Editar Dados</button><button class="btn btn-gold" onclick="criarPedidoTipo('Angola')">✅ Concluir Pedido Angola</button></div></div></div></div></section>
+
+<section id="solicitar-exterior" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>🌍 Solicitar Reconhecimento - Exterior - Com Botões</h2><div class="steps"><span class="done">✅ Tipo Exterior</span><span class="active" id="stepExt">2️⃣ Dados</span><span>3️⃣ Documentos</span><span>4️⃣ Pagamento</span></div><div id="extStep1"><label>💰 Modalidade</label><select id="modExt"><option value="normal">🕐 Normal 8.000Kz</option><option value="urgente">⚡ Urgente 25.000Kz</option><option value="personalizado">⭐ Personalizado 35.000Kz</option><option value="executivo">🚀 Executivo 2h</option></select><label>🎓 Curso</label><input id="cursoExt"><label>🏫 Instituição Exterior</label><input id="instExt"><label>🌍 País</label><input id="paisExt"><label>🔢 Nº Diploma</label><input id="docExt"><label>📅 Ano</label><input id="anoExt"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#solicitar-novo')">⬅️ Voltar</button><button class="btn" onclick="avancarExt()">Avançar ➡️</button></div></div><div id="extStep2" style="display:none"><div class="upload"><b>📎 Documentos Exterior</b><br><label>🪪 BI</label><input type="file" id="fileExtBI"><label>🎓 Diploma Exterior</label><input type="file" id="fileExtDip"><label>📄 Tradução</label><input type="file" id="fileExtTrad"><small id="statusExt" style="color:green"></small></div><div class="nav-actions"><button class="btn btn-outline" onclick="voltarExt()">⬅️ Voltar</button><button class="btn" onclick="editarExt()">✏️ Editar</button><button class="btn btn-gold" onclick="criarPedidoTipo('Exterior')">✅ Concluir Exterior</button></div></div></div></div></section>
+
+<section id="perfil" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>👤 Perfil do Usuário / Utente - Avatar Emoji Baseado nas Informações</h2><div style="display:grid;grid-template-columns:110px 1fr;gap:14px"><div style="text-align:center"><div id="avatarPrev" class="avatar" style="width:90px;height:90px;font-size:36px;margin:0 auto">👤</div><br><small id="avatarEmoji" style="font-size:22px">🧑‍🎓</small><br><input type="file" id="fileAvatar" accept="image/*" style="margin-top:8px"><br><small>📸 Avatar com detalhes</small></div><div><label>👤 Nome Completo</label><input id="p_nome"><label>📧 Email</label><input id="p_email" disabled><label>📱 Telefone / WhatsApp</label><input id="p_tel"><label>🆔 BI / NIF / Passaporte</label><input id="p_nif"><label>🏠 Endereço</label><input id="p_end"><label>🔑 Nova Senha</label><input id="p_senha" type="password"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#inicio')">⬅️ Voltar</button><button class="btn" onclick="editarPerfil()">✏️ Editar</button><button class="btn btn-gold" onclick="salvarPerfil()">💾 Concluir ✅</button><button class="btn" onclick="go('#dados-pessoais')">Avançar Dados Pessoais ➡️</button></div></div></div></div></div></section>
+
+<section id="dados-pessoais" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>🪪 Dados Pessoais do Usuário / Utente - Sincronizado</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>👤 Nome</label><input id="dp_nome" disabled><label>🆔 BI</label><input id="dp_bi" disabled><label>📧 Email</label><input id="dp_email" disabled></div><div><label>📱 Telefone</label><input id="dp_tel" disabled><label>🏠 Endereço</label><input id="dp_end" disabled><label>🎓 Total Pedidos</label><input id="dp_total" disabled></div></div><div class="alert alert-info">🔗 Dados sincronizados com Perfil, Documentos, Pedidos, Recibos, Declarações - tudo ligado, sincronizado e conectado.</div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#perfil')">⬅️ Voltar Perfil</button><button class="btn" onclick="go('#documentos')">Avançar Documentos ➡️</button><button class="btn btn-gold" onclick="go('#solicitar-novo')">➕ Solicitar Novo Pedido Avançar ➡️</button><button class="btn" onclick="go('#pedidos')">📄 Meus Pedidos Avançar ➡️</button></div></div></div></section>
+
+<section id="documentos" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>📎 Meus Documentos - Cofre Digital com Símbolos e Emojis</h2><div class="alert alert-info">📁 Símbolos: 🪪 BI | 🎓 Diploma Angola | 🌍 Diploma Exterior | 💳 Comprovativo | 📄 Outro - tudo sincronizado</div><label>📂 Categoria</label><select id="docCat"><option>🪪 BI</option><option>🎓 Diploma Angola</option><option>🌍 Diploma Exterior</option><option>💳 Comprovativo Pagamento</option><option>📄 Outro</option></select><input type="file" id="fileDocGeral"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#dados-pessoais')">⬅️ Voltar Dados Pessoais</button><button class="btn" onclick="uploadDocGeral()">📤 Avançar / Enviar</button><button class="btn btn-gold" onclick="go('#pedidos')">✅ Concluir e Ver Pedidos ➡️</button></div><br><table><thead><tr><th>📅 Data</th><th>📂 Categoria</th><th>📄 Nome</th><th>👁️ Ação</th></tr></thead><tbody id="tbodyDocs"></tbody></table></div></div></section>
+
+<section id="pedidos" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>📄 Meus Pedidos - Todos - Com Botões Avançar Voltar Editar Concluir - Tudo Ligado</h2><div class="alert alert-info">💳 Entidade: 00579 | 🔢 Ref: 457525796 | 🧾 Recibo após comprovativo | 🎓 Declaração após prazo | 🔗 Tudo ligado e sincronizado</div><div id="listaTodos"></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#documentos')">⬅️ Voltar Documentos</button><button class="btn" onclick="go('#pendentes')">Avançar Pendentes ➡️</button><button class="btn btn-gold" onclick="go('#solicitar-novo')">➕ Solicitar Novo Pedido</button><button class="btn" onclick="go('#recibos')">🧾 Recibos Avançar ➡️</button></div></div></div></section>
+
+<section id="pendentes" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>⏳ Meus Pedidos Pendentes - Com Emojis e Botões</h2><div id="listaPendentes"></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#pedidos')">⬅️ Voltar Pedidos</button><button class="btn" onclick="go('#aprovados')">Avançar Aprovados ➡️</button><button class="btn btn-gold" onclick="go('#recibos')">🧾 Avançar Recibos ➡️</button></div></div></div></section>
+
+<section id="aprovados" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>✅ Meus Pedidos Aprovados - Declarações Liberadas - Tudo Conectado</h2><div id="listaAprovados"></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#pendentes')">⬅️ Voltar Pendentes</button><button class="btn btn-gold" onclick="go('#declaracoes')">🎓 Avançar Declarações ➡️</button><button class="btn" onclick="go('#inicio')">✅ Concluir e Voltar Início</button></div></div></div></section>
+
+<section id="recibos" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>🧾 Recibos - Liberado Após Anexar Comprovativo - Com Botões Avançar Voltar Editar Concluir</h2><div class="alert alert-success">✅ Recibo liberado automaticamente ao anexar comprovativo Entidade 00579 Ref 457525796</div><div id="listaRecibos"></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#pendentes')">⬅️ Voltar Pendentes</button><button class="btn" onclick="go('#declaracoes')">Avançar Declarações ➡️</button><button class="btn btn-gold" onclick="go('#aprovados')">✅ Concluir Aprovados ➡️</button></div></div></div></section>
+
+<section id="declaracoes" class="section"><div class="grid"><div class="card" style="grid-column:1/-1"><h2>🎓 Declarações - Liberado Após Comprovativo + Prazo - Com Emojis e Botões</h2><div class="alert alert-success">🎓 Declaração após comprovativo + prazo: 🕐 Normal 30 dias, ⚡ Urgente 15 dias, ⭐ Personalizado 24h, 🚀 Executivo 2h</div><div id="listaDeclaracoes"></div><div class="nav-actions"><button class="btn btn-outline" onclick="go('#recibos')">⬅️ Voltar Recibos</button><button class="btn btn-gold" onclick="go('#inicio')">🏠 Concluir e Voltar Início ✅</button><button class="btn" onclick="go('#perfil')">👤 Meu Perfil Avançar ➡️</button></div></div></div></section>
+
+<section id="login" class="section"><div class="grid"><div class="card"><h2>🔐 Entrar na Conta - Com Botões</h2><label>📧 Email</label><input id="l_email"><label>🔑 Senha</label><input id="l_senha" type="password"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#inicio')">⬅️ Voltar Início</button><button class="btn" onclick="login()">➡️ Avançar / Entrar</button><button class="btn btn-gold" onclick="go('#criar')">✨ Criar Conta Avançar ➡️</button></div></div></div></section>
+
+<section id="criar" class="section"><div class="grid"><div class="card"><h2>✨ Criar Conta INAAREES - Com Avatar Emoji e Botões</h2><label>👤 Nome Completo</label><input id="c_nome" placeholder="Ex: João Silva"><label>📧 Email</label><input id="c_email"><label>📱 Telefone / WhatsApp</label><input id="c_tel" placeholder="+244 938..."><label>🆔 BI / NIF</label><input id="c_nif"><label>🔑 Senha</label><input id="c_senha" type="password"><div class="nav-actions"><button class="btn btn-outline" onclick="go('#login')">⬅️ Voltar Login</button><button class="btn" onclick="editarCriar()">✏️ Editar</button><button class="btn btn-gold" onclick="criarConta()">✅ Concluir Criação</button><button class="btn" onclick="go('#perfil')">Avançar Perfil ➡️</button></div></div></div></section>
+</main>
+</div>
+
+<footer class="footer">
+<b>🇦🇴 INAAREES</b> - Kilamba, Belas, Luanda | 📱 WhatsApp <a href="https://wa.me/244938510719">+244 938 510 719</a> | 📧 inaarees.gov.ao@gmail.com<br>
+🏦 Entidade: 00579 | 🔢 Referência: 457525796 | 🔗 Todas páginas, categorias, funções, secções e etapas ligadas, sincronizadas e conectadas | © 2026 Governo de Angola
+</footer>
+<a class="whats" href="https://wa.me/244938510719" target="_blank">💬 WhatsApp</a>
+
+<script>
+const ENTIDADE = "00579";
+const REFERENCIA = "457525796";
+let db=JSON.parse(localStorage.getItem('inaarees_fix_final')||'{"users":[],"pedidos":[],"docs":[]}');
+function save(){localStorage.setItem('inaarees_fix_final',JSON.stringify(db))}
+let cur=JSON.parse(localStorage.getItem('inaarees_cur_fix_final')||'null');
+let temp={Angola:{bi:null,dip:null},Exterior:{bi:null,dip:null,trad:null}};
+
+function getEmojiAvatar(nome){
+ nome=(nome||'').toLowerCase();
+ if(nome.includes('joao')||nome.includes('joão')) return '👨‍🎓';
+ if(nome.includes('maria')) return '👩‍🎓';
+ if(nome.includes('pedro')) return '👨‍💼';
+ if(nome.includes('ana')) return '👩‍💼';
+ if(nome.length%3==0) return '🧑‍🎓';
+ if(nome.length%3==1) return '👨‍🎓';
+ return '👩‍🎓';
+}
+
+function go(h){
+ location.hash=h;
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ let el=document.querySelector(h); if(el) el.classList.add('active');
+ document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+ let navEl=document.getElementById('nav-'+h.replace('#','')); if(navEl) navEl.classList.add('active');
+ document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+ document.getElementById('sideUser').classList.toggle('active',!!cur);
+ document.getElementById('bEntrar').style.display=cur?'none':'inline-flex';
+ document.getElementById('bCriar').style.display=cur?'none':'inline-flex';
+ document.getElementById('bSair').style.display=cur?'inline-flex':'none';
+ if(cur){
+   document.getElementById('sideNome').innerText=cur.nome||'Utente';
+   document.getElementById('sideEmail').innerText=cur.email;
+   let emoji=getEmojiAvatar(cur.nome);
+   document.getElementById('avatarSide').innerText=cur.avatar? '' : emoji;
+   if(cur.avatar) document.getElementById('avatarSide').innerHTML=`<img src="${cur.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+ }
+ if(h=='#perfil') renderPerfil();
+ if(h=='#dados-pessoais') renderDadosPessoais();
+ if(h=='#documentos') renderDocs();
+ if(h=='#pedidos') renderTodos();
+ if(h=='#pendentes') renderPendentes();
+ if(h=='#aprovados') renderAprovados();
+ if(h=='#recibos') renderRecibos();
+ if(h=='#declaracoes') renderDeclaracoes();
+ window.scrollTo(0,0);
+}
+
+function selecionarTaxa(tipo){go('#solicitar-novo'); setTimeout(()=>{alert('✅ Taxa '+tipo+' selecionada! Avance para Solicitar Novo Pedido ➡️');},100);}
+
+function avancarAngola(){if(!cursoAngola.value||!instAngola.value) return alert('✏️ Preencha curso e instituição antes de Avançar ➡️'); document.getElementById('angolaStep1').style.display='none'; document.getElementById('angolaStep2').style.display='block'; document.getElementById('stepAngola').innerText='3️⃣ Documentos'; document.getElementById('stepAngola').className='done';}
+function voltarAngola(){document.getElementById('angolaStep2').style.display='none'; document.getElementById('angolaStep1').style.display='block'; document.getElementById('stepAngola').innerText='2️⃣ Dados Curso'; document.getElementById('stepAngola').className='active';}
+function editarAngola(){voltarAngola(); alert('✏️ Editar dados - altere e clique Avançar');}
+function avancarExt(){if(!cursoExt.value||!instExt.value) return alert('✏️ Preencha curso e instituição'); document.getElementById('extStep1').style.display='none'; document.getElementById('extStep2').style.display='block'; document.getElementById('stepExt').innerText='3️⃣ Documentos'; document.getElementById('stepExt').className='done';}
+function voltarExt(){document.getElementById('extStep2').style.display='none'; document.getElementById('extStep1').style.display='block'; document.getElementById('stepExt').innerText='2️⃣ Dados'; document.getElementById('stepExt').className='active';}
+function editarExt(){voltarExt(); alert('✏️ Editar exterior');}
+function editarPerfil(){alert('✏️ Modo Editar ativado - altere os dados e clique Concluir ✅');}
+function editarCriar(){alert('✏️ Edite os dados antes de Concluir');}
+
+function criarConta(){if(!c_nome.value||!c_email.value||!c_senha.value) return alert('Preencha nome, email e senha'); if(db.users.find(u=>u.email==c_email.value)) return alert('Email já existe'); let u={id:Date.now(),nome:c_nome.value,email:c_email.value,tel:c_tel.value,nif:c_nif.value,senha:c_senha.value,endereco:'',avatar:''}; db.users.push(u); save(); alert('✅ Conta criada! '+getEmojiAvatar(u.nome)+' Avance para login ➡️'); go('#login')}
+function login(){let e=l_email.value.trim(), s=l_senha.value; let u=db.users.find(x=>x.email==e&&x.senha==s); if(!u) return alert('❌ Credenciais inválidas'); cur=u; localStorage.setItem('inaarees_cur_fix_final',JSON.stringify(cur)); go('#perfil');}
+function logout(){localStorage.removeItem('inaarees_cur_fix_final'); cur=null; go('#inicio'); alert('🚪 Saiu - Voltar ao Início');}
+
+fileAngolaBI?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{temp.Angola.bi=r.result; statusAngola.innerText='✅ BI Angola anexado 🪪 '+getEmojiAvatar(cur?.nome||'');}; r.readAsDataURL(e.target.files[0])});
+fileAngolaDip?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{temp.Angola.dip=r.result; statusAngola.innerText='✅ Diploma Angola anexado 🎓';}; r.readAsDataURL(e.target.files[0])});
+fileExtBI?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{temp.Exterior.bi=r.result; statusExt.innerText='✅ BI anexado 🪪';}; r.readAsDataURL(e.target.files[0])});
+fileExtDip?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{temp.Exterior.dip=r.result; statusExt.innerText='✅ Diploma Exterior anexado 🌍';}; r.readAsDataURL(e.target.files[0])});
+fileExtTrad?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{temp.Exterior.trad=r.result; statusExt.innerText='✅ Tradução anexada 📄';}; r.readAsDataURL(e.target.files[0])});
+
+function criarPedidoTipo(tipo){
+ if(!cur) return alert('Faça login primeiro - Avançar para Login');
+ let isAng=tipo==='Angola';
+ let mod=isAng? modAngola.value: modExt.value;
+ let curso=isAng? cursoAngola.value: cursoExt.value;
+ let inst=isAng? instAngola.value: instExt.value;
+ let doc=isAng? docAngola.value: docExt.value;
+ let ano=isAng? anoAngola.value: anoExt.value;
+ let pais=isAng? 'Angola' : (paisExt.value||'Exterior');
+ if(!curso||!inst) return alert('✏️ Preencha curso e instituição antes de Concluir');
+ if(isAng && (!temp.Angola.bi||!temp.Angola.dip)) return alert('📎 Anexe BI 🪪 e Diploma 🎓 antes de Concluir');
+ if(!isAng && (!temp.Exterior.bi||!temp.Exterior.dip)) return alert('📎 Anexe BI 🪪 e Diploma 🌍 antes de Concluir');
+ let vals={normal:8000,urgente:25000,personalizado:35000,executivo:0};
+ let prazosTexto={normal:'30 dias úteis',urgente:'15 dias úteis',personalizado:'24 horas úteis',executivo:'2 horas úteis'};
+ let prazosMs={normal:30000,urgente:15000,personalizado:10000,executivo:5000};
+ let prazosReais={normal:'30 dias úteis',urgente:'15 dias úteis',personalizado:'24 horas úteis',executivo:'2 horas úteis'};
+ let docs=isAng? {bi:temp.Angola.bi,diploma:temp.Angola.dip} : {bi:temp.Exterior.bi,diploma:temp.Exterior.dip,trad:temp.Exterior.trad};
+ let agora=Date.now();
+ let p={id:'INAA-'+agora.toString().slice(-6),user:cur.email,nome:cur.nome,tipo,modalidade:mod,valor:vals[mod],prazo:prazosTexto[mod],prazoReal:prazosReais[mod],prazoMs:prazosMs[mod],curso,inst,pais,docNum:doc,ano,estado:'⏳ Aguardando Pagamento - Entidade '+ENTIDADE+' Ref '+REFERENCIA,ent:ENTIDADE,ref:REFERENCIA,comp:'',dataPagamento:null,dataPrevista:null,docs,data:new Date().toLocaleString('pt-AO')};
+ db.pedidos.push(p);
+ db.docs.push({user:cur.email,cat:'🪪 BI',nome:'🪪 BI '+p.id,data:p.data,content:docs.bi});
+ db.docs.push({user:cur.email,cat:'🎓 Diploma '+tipo,nome:'🎓 Diploma '+p.id,data:p.data,content:docs.diploma});
+ save(); alert('✅ Pedido '+p.id+' '+getEmojiAvatar(cur.nome)+' Concluído! Efetue pagamento Entidade: '+ENTIDADE+' Ref: '+REFERENCIA+' e anexe comprovativo. Recibo libera ao anexar. Avançar para Meus Pedidos ➡️'); go('#pedidos');
+}
+
+function renderPerfil(){
+ if(!cur){go('#login');return;}
+ p_nome.value=cur.nome||''; p_email.value=cur.email; p_tel.value=cur.tel||''; p_nif.value=cur.nif||''; p_end.value=cur.endereco||'';
+ let emoji=getEmojiAvatar(cur.nome);
+ document.getElementById('avatarPrev').innerText=cur.avatar? '' : emoji;
+ document.getElementById('avatarEmoji').innerText=emoji+' 🧑‍🎓 '+cur.nome+' - Avatar baseado nas informações';
+ if(cur.avatar) document.getElementById('avatarPrev').innerHTML=`<img src="${cur.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+}
+function renderDadosPessoais(){
+ if(!cur){go('#login');return;}
+ dp_nome.value=cur.nome||''; dp_bi.value=cur.nif||''; dp_email.value=cur.email; dp_tel.value=cur.tel||''; dp_end.value=cur.endereco||''; dp_total.value=db.pedidos.filter(p=>p.user==cur.email).length+' pedidos - '+getEmojiAvatar(cur.nome);
+}
+function salvarPerfil(){if(!cur) return; cur.nome=p_nome.value; cur.tel=p_tel.value; cur.nif=p_nif.value; cur.endereco=p_end.value; if(p_senha.value) cur.senha=p_senha.value; let u=db.users.find(x=>x.email==cur.email); if(u) Object.assign(u,cur); localStorage.setItem('inaarees_cur_fix_final',JSON.stringify(cur)); save(); alert('💾 Perfil salvo! ✅ Concluído '+getEmojiAvatar(cur.nome)+' - Avançar para Dados Pessoais ➡️'); go('#dados-pessoais');}
+fileAvatar?.addEventListener('change',e=>{let r=new FileReader(); r.onload=()=>{cur.avatar=r.result; document.getElementById('avatarPrev').innerHTML=`<img src="${r.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`; document.getElementById('avatarSide').innerHTML=`<img src="${r.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;}; r.readAsDataURL(e.target.files[0])});
+
+function uploadDocGeral(){let f=fileDocGeral.files[0]; if(!f) return alert('Escolha arquivo'); let cat=docCat.value; let r=new FileReader(); r.onload=()=>{db.docs.push({user:cur.email,cat,nome:cat+' - '+f.name,data:new Date().toLocaleString(),content:r.result}); save(); renderDocs(); alert('📤 Documento enviado! ✅ Concluir - Avançar para Pedidos ➡️');}; r.readAsDataURL(f);}
+function renderDocs(){if(!cur){go('#login');return;} let tb=tbodyDocs; tb.innerHTML=''; db.docs.filter(d=>d.user==cur.email).reverse().forEach(d=>{let tr=document.createElement('tr'); tr.innerHTML=`<td>${d.data}</td><td>${d.cat}</td><td>${d.nome}</td><td><a href="${d.content}" target="_blank">👁️ Ver</a> | <button class="btn-small btn-outline" onclick="go('#pedidos')">➡️ Pedidos</button> <button class="btn-small btn" onclick="go('#solicitar-novo')">✏️ Editar Novo</button></td>`; tb.appendChild(tr);});}
+
+function cardPedido(p){
+ let badge='b-pend'; if(p.comp) badge='b-ref'; if(p.estado.includes('Declaração Liberada')) badge='b-aprov';
+ let tempo='';
+ if(p.dataPrevista){
+   let diff=p.dataPrevista-Date.now();
+   if(diff>0){let seg=Math.ceil(diff/1000); tempo=`<span class="countdown">⏳ Declaração em ${seg}s - Prazo real ${p.prazoReal}</span>`;}
+   else{tempo=`<span class="countdown" style="background:var(--dourado);color:#000">✅ Prazo atingido - Declaração liberada</span>`;}
+ }
+ return `<div class="card" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><div style="flex:1;min-width:220px"><b class="mono">${p.id}</b> ${p.tipo=='Angola'?'🇦🇴':'🌍'} ${p.pais}<br><b>🎓 ${p.curso}</b><br><small>🏫 ${p.inst}</small><br><small>📅 ${p.data} | 💰 ${p.modalidade} | ${p.valor? p.valor+' Kz':''} | ⏳ ${p.prazo}</small><br><span class="badge ${badge}">${p.estado}</span><br><small>🏦 Ent: ${p.ent} 🔢 Ref: ${p.ref}</small><br><small>🪪 <a href="${p.docs.bi}" target="_blank">BI</a> | 🎓 <a href="${p.docs.diploma}" target="_blank">Diploma</a> ${p.comp?`| 💳 <a href="${p.comp}" target="_blank" style="color:green">Comprovativo</a>`:''}</small><br>${tempo}</div><div style="min-width:210px">
+ ${!p.comp? `<div class="pagamento-box" style="margin:0;padding:10px"><b>💳 Pague e anexe</b><br><small>🏦 Ent: <b>${p.ent}</b><br>🔢 Ref: <b>${p.ref}</b><br>💵 Valor: <b>${p.valor} Kz</b></small><br><input type=file onchange="anexarComp(event,'${p.id}')" accept="image/*,.pdf" style="margin-top:8px"><br><small>🧾 Recibo libera ao anexar</small></div>`:`<div style="color:green;font-weight:700">✅ Comprovativo anexado - Recibo liberado</div>`}
+ <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-small" onclick="gerarRecibo('${p.id}')" ${!p.comp?'disabled':''}>🧾 Recibo</button><button class="btn btn-small btn-gold" onclick="gerarDeclaracao('${p.id}')" ${p.dataPrevista && Date.now() < p.dataPrevista? 'disabled' : ''}>🎓 Declaração</button></div>
+ <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn-small btn-outline" onclick="go('#dados-pessoais')">✏️ Editar</button><button class="btn-small btn-outline" onclick="go('#documentos')">📎 Docs</button><button class="btn-small btn-outline" onclick="go('#perfil')">👤 Perfil</button></div>
+ </div></div></div>`;
+}
+function renderTodos(){if(!cur){go('#login');return;} let div=listaTodos; let meus=db.pedidos.filter(p=>p.user==cur.email).reverse(); div.innerHTML=meus.length? meus.map(p=>cardPedido(p)).join(''):'<div class="alert alert-info">📭 Nenhum pedido. ➕ Vá em Solicitar Novo Pedido Avançar ➡️</div>';}
+function renderPendentes(){if(!cur){go('#login');return;} let div=listaPendentes; let meus=db.pedidos.filter(p=>p.user==cur.email &&!p.estado.includes('Declaração Liberada')).reverse(); div.innerHTML=meus.length? meus.map(p=>cardPedido(p)).join(''):'<div class="alert alert-success">✅ Sem pendentes. Tudo concluído! Avançar para Aprovados ➡️</div>';}
+function renderAprovados(){if(!cur){go('#login');return;} let div=listaAprovados; let meus=db.pedidos.filter(p=>p.user==cur.email && p.estado.includes('Declaração Liberada')).reverse(); div.innerHTML=meus.length? meus.map(p=>cardPedido(p)).join(''):'<div class="alert alert-info">📭 Nenhum aprovado ainda. ⏳ Aguarde prazo da taxa após comprovativo.</div>';}
+function renderRecibos(){if(!cur){go('#login');return;} let div=listaRecibos; let meus=db.pedidos.filter(p=>p.user==cur.email && p.comp).reverse(); div.innerHTML=meus.length? meus.map(p=>`<div class="card" style="margin-bottom:8px"><b>🧾 ${p.id}</b> - 🎓 ${p.curso} - Recibo liberado ✅<br><small>🏦 Ent ${p.ent} 🔢 Ref ${p.ref} - ${p.valor}Kz</small><br><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-small" onclick="gerarRecibo('${p.id}')">🧾 Baixar Recibo</button><button class="btn-small btn-outline" onclick="go('#declaracoes')">➡️ Avançar Declarações</button><button class="btn-small btn-outline" onclick="go('#perfil')">✏️ Editar Perfil</button></div></div>`).join(''):'<div class="alert alert-warn">📭 Nenhum recibo. Anexe comprovativo em Meus Pedidos.</div>';}
+function renderDeclaracoes(){if(!cur){go('#login');return;} let div=listaDeclaracoes; let meus=db.pedidos.filter(p=>p.user==cur.email && p.comp).reverse(); div.innerHTML=meus.length? meus.map(p=>{let liberada=!p.dataPrevista || Date.now()>=p.dataPrevista; return `<div class="card" style="margin-bottom:8px"><b>🎓 ${p.id}</b> - ${p.curso} - ${p.tipo} ${p.tipo=='Angola'?'🇦🇴':'🌍'}<br><small>⏳ Prazo: ${p.prazoReal} | 🏦 Ent ${p.ent} 🔢 Ref ${p.ref}</small><br>${liberada? `<button class="btn btn-small btn-gold" onclick="gerarDeclaracao('${p.id}')">🎓 Baixar Declaração</button> ✅ Liberada`:`<span class="countdown">⏳ ${Math.ceil((p.dataPrevista-Date.now())/1000)}s - ${p.prazoReal}</span>`} <button class="btn-small btn-outline" onclick="go('#perfil')">👤 Perfil</button></div>`}).join(''):'<div class="alert alert-warn">📭 Nenhuma declaração. Anexe comprovativo e aguarde prazo.</div>';}
+
+function anexarComp(e,id){
+ let r=new FileReader();
+ r.onload=()=>{
+   let p=db.pedidos.find(x=>x.id==id);
+   p.comp=r.result;
+   p.dataPagamento=Date.now();
+   p.dataPrevista=Date.now()+p.prazoMs;
+   p.estado='✅ Pagamento Confirmado - 🧾 Recibo Liberado - 🎓 Declaração em '+p.prazoReal;
+   save();
+   alert('✅ Comprovativo anexado! 🧾 Recibo liberado. 🎓 Declaração após prazo: '+p.prazoReal+' '+getEmojiAvatar(cur.nome)+' - Concluir ✅');
+   renderTodos();
+   setTimeout(()=>{let pp=db.pedidos.find(x=>x.id==id); if(pp){pp.estado='✅ Aprovado - 🎓 Declaração Liberada após '+pp.prazoReal; save(); if(location.hash=='#declaracoes') renderDeclaracoes();}}, p.prazoMs);
+ };
+ r.readAsDataURL(e.target.files[0]);
+}
+
+function gerarRecibo(id){
+ let p=db.pedidos.find(x=>x.id==id);
+ if(!p.comp) return alert('🧾 Recibo só após anexar comprovativo. Entidade: '+ENTIDADE+' Referência: '+REFERENCIA);
+ const {jsPDF}=window.jspdf; let doc=new jsPDF();
+ doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('INAAREES - RECIBO DE SOLICITAÇÃO',10,15);
+ doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('Instituto Nacional de Avaliação, Acreditação e Reconhecimento de Estudos',10,21);
+ doc.text('Sede: Kilamba, Belas, Luanda | WhatsApp +244 938 510 719 | inaarees.gov.ao@gmail.com',10,26);
+ doc.text('Entidade: '+ENTIDADE+' | Referência: '+REFERENCIA,10,31);
+ doc.line(10,33,200,33);
+ doc.setFontSize(11); let y=42;
+ doc.text(`ID Pedido: ${p.id}`,10,y); y+=6;
+ doc.text(`Utente: ${p.nome} ${getEmojiAvatar(p.nome)} - ${p.user}`,10,y); y+=6;
+ doc.text(`Curso: ${p.curso} | Instituição: ${p.inst} | Tipo: ${p.tipo} | País: ${p.pais} | Ano: ${p.ano}`,10,y); y+=6;
+ doc.text(`Modalidade: ${p.modalidade} | Valor: ${p.valor} Kz | Prazo declaração: ${p.prazoReal}`,10,y); y+=6;
+ doc.text(`Entidade: ${p.ent} | Referência: ${p.ref} | Data Solicitação: ${p.data}`,10,y); y+=6;
+ doc.text(`Data Pagamento (comprovativo): ${new Date(p.dataPagamento).toLocaleString('pt-AO')}`,10,y); y+=6;
+ doc.text(`Estado: ${p.estado}`,10,y); y+=12;
+ doc.setFont('helvetica','bold'); doc.text('PAGAMENTO CONFIRMADO VIA COMPROVATIVO ANEXADO',10,y); y+=8;
+ doc.setFont('helvetica','normal'); doc.text('Recibo válido como comprovativo de solicitação e pagamento INAAREES.',10,y);
+ doc.save(`RECIBO_INAAREES_${p.id}.pdf`);
+}
+
+function gerarDeclaracao(id){
+ let p=db.pedidos.find(x=>x.id==id);
+ if(!p.comp) return alert('Anexe comprovativo primeiro.');
+ if(p.dataPrevista && Date.now() < p.dataPrevista){let seg=Math.ceil((p.dataPrevista-Date.now())/1000); return alert('Declaração aguardando prazo '+p.prazoReal+' - '+seg+'s restantes (simulação). Prazo real: '+p.prazoReal+' após pagamento.');}
+ const {jsPDF}=window.jspdf; let doc=new jsPDF();
+ doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text('INAAREES - DECLARAÇÃO OFICIAL',10,16);
+ doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.text('Instituto Nacional de Avaliação, Acreditação e Reconhecimento de Estudos',10,22);
+ doc.text('Governo de Angola | Kilamba, Belas, Luanda | WhatsApp +244 938 510 719 | inaarees.gov.ao@gmail.com',10,27);
+ doc.text('Entidade: 00579 | Referência: 457525796',10,32);
+ doc.line(10,34,200,34);
+ doc.setFontSize(11); let y=44;
+ doc.text(`Declara-se para efeitos legais que foi homologado/reconhecido:`,10,y); y+=8;
+ doc.setFont('helvetica','bold'); doc.text(`Titular: ${p.nome} ${getEmojiAvatar(p.nome)} | BI: ${db.users.find(u=>u.email==p.user)?.nif||''}`,10,y); y+=7;
+ doc.setFont('helvetica','normal');
+ doc.text(`Curso: ${p.curso} | Instituição: ${p.inst} | País: ${p.pais} | Ano: ${p.ano}`,10,y); y+=7;
+ doc.text(`Tipo: Homologação ${p.tipo} | ID: ${p.id} | Modalidade: ${p.modalidade}`,10,y); y+=7;
+ doc.text(`Valor pago: ${p.valor} Kz | Entidade: ${p.ent} | Referência: ${p.ref}`,10,y); y+=7;
+ doc.text(`Data solicitação: ${p.data} | Data pagamento: ${new Date(p.dataPagamento).toLocaleString('pt-AO')}`,10,y); y+=7;
+ doc.text(`Prazo da taxa: ${p.prazoReal} | Declaração liberada em: ${new Date().toLocaleString('pt-AO')}`,10,y); y+=12;
+ doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('PARECER: APROVADO - HOMOLOGAÇÃO VÁLIDA NACIONAL E INTERNACIONALMENTE',10,y); y+=10;
+ doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.text(`Código verificação: ${p.id}-${p.valor}-AO-00579-457525796 | Selo digital INAAREES | ${getEmojiAvatar(p.nome)}`,10,y);
+ doc.save(`DECLARACAO_OFICIAL_INAAREES_${p.id}.pdf`);
+}
+
+go(location.hash||'#inicio');
+setInterval(()=>{if(cur){if(location.hash=='#declaracoes') renderDeclaracoes(); if(location.hash=='#pedidos') renderTodos(); if(location.hash=='#pendentes') renderPendentes();}},1000);
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</html>
